@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+    {% else %}
+        Welcome to inmakes store where you can buy different items....
+    {% endif %}
+{% endblock %}
+{% block title %}
+    {% if category %}
+        {{ category.name }} - inmakes store
+    {% else %}
+        See our New Collections - inmakes store
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+
+    <div>
+        <div class="row my_row_class">
+            <div class="mx-auto">
+        <p><a href="{% url 'ecommerceapp:allprodCat' %}">"Our product Collections"</a></p>
+    </div>
+        </div>
+</div>
+    {% endif %}
+<div class="mx_auto">
+    {% if category %}
+        <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+</div>
+    <br>
+<div>
+        <h1 class="text-center my_title">{{category.name}}</h1>
+        <P class="text-justify">{{category.description}}</P>
+</div>
+    {% else %}
+<div>
+<img class="my_image my_image_padding" src="{% static 'img/Banner.png' %}" style="width:1114px;height:500px" alt="our products">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title">Our product Collections</h1>
+    <p class="text-justify">Are you interested in shopping at Inmakes-shop Are you curious to see if Inmakes-store really is an online store? This review will explain why Inmakes-store received a low trust score from our scam detector.Online retailers have all sorts of tricks for getting consumers to buy more and buy faster.With the world opening up again, more people are starting to shop in person again, which means online grocers are beginning ...</p>
+</div>
+    {% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-3 xol-lg-3">
+            <div class="card text-center" style="min-width:18rem;">
+                <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" style="width:100px; height:100px" alt="{{product.name}}"></a>
+            <div class="card-body">
+             <h4>{{product.name}}</h4>
+                <P>Rs.{{product.price}}</P>
+
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+{% endblock %}
